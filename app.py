@@ -58,7 +58,7 @@ df_final_filtrado['MUNICIPIO_UPPER'] = df_final_filtrado['MUNICIPIO'].str.upper(
 
 # 4. Carregando o arquivo Geográfico (Mapas)
 gdf = gpd.read_file('municipios_rs.geojson')
-gdf['name_upper'] = gdf['name'].str.upper()
+gdf['name_upper'] = gdf['name'].apply(tirar_acentos)
 
 
 # --- INICIALIZAÇÃO DO DASH ---
