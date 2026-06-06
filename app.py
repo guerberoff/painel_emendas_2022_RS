@@ -7,15 +7,17 @@ import unicodedata
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
-# --- FUNÇÃO AUXILIAR ATUALIZADA ---
+# --- FUNÇÃO AUXILIAR ANTIBOMBA ---
 def tirar_acentos(texto):
     if pd.isna(texto):
         return texto
     texto = str(texto)
-    # Remove acentos
+    # Remove acentos e padroniza
     texto = unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('utf-8')
-    # RESOLVE O PROBLEMA DE SANT'ANA E ENTRE-IJUÍS:
-    texto = texto.replace("'", "").replace("-", " ")
+    
+    # PEGA O APÓSTROFO RETO ('), O CURVO (’) E O HÍFEN (-)
+    texto = texto.replace("'", "").replace("’", "").replace("-", " ")
+    
     return texto.upper().strip()
 
 # --- CARREGAMENTO E TRATAMENTO DOS DADOS LEVES ---
