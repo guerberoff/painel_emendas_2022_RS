@@ -417,6 +417,7 @@ import geopandas as gpd
 
 # --- Inicialização ---
 app = Dash(__name__)
+server = app.server
 
 # --- Layout ---
 app.layout = html.Div([
