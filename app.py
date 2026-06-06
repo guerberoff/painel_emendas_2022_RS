@@ -101,6 +101,9 @@ def update_map(selected_candidato):
     # Filtrando dados do candidato escolhido no menu
     df_candidato = df_final_filtrado[df_final_filtrado['CANDIDATO'] == selected_candidato].copy()
 
+    # >>> ADICIONE ESSA LINHA DE RAIO-X BEM AQUI: <<<
+    print(f"DEBUG_HAMM -> {selected_candidato}:", df_candidato[['MUNICIPIO_UPPER', 'QT_VOTOS_NOMINAIS', 'Valor pago']].to_dict('records'))
+
     # Unindo os dados políticos com o mapa geográfico do RS
     gdf_plot = gdf.merge(df_candidato, left_on='name_upper', right_on='MUNICIPIO_UPPER', how='left')
 
