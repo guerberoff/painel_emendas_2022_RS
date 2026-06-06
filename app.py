@@ -8,16 +8,15 @@ from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
 # --- FUNÇÃO AUXILIAR ANTIBOMBA ---
+# Remove acentos e padroniza os nomes (incluindo apóstrofos e hífens) para evitar erros de casamento
 def tirar_acentos(texto):
     if pd.isna(texto):
         return texto
     texto = str(texto)
-    # Remove acentos e padroniza
+    # Remove acentos
     texto = unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('utf-8')
-    
-    # PEGA O APÓSTROFO RETO ('), O CURVO (’) E O HÍFEN (-)
+    # Remove apóstrofos retos, curvos e substitui hífens por espaços
     texto = texto.replace("'", "").replace("’", "").replace("-", " ")
-    
     return texto.upper().strip()
 
 # --- CARREGAMENTO E TRATAMENTO DOS DADOS LEVES ---
@@ -101,9 +100,6 @@ def update_map(selected_candidato):
     # Filtrando dados do candidato escolhido no menu
     df_candidato = df_final_filtrado[df_final_filtrado['CANDIDATO'] == selected_candidato].copy()
 
-    # >>> ADICIONE ESSA LINHA DE RAIO-X BEM AQUI: <<<
-    print(f"DEBUG_HAMM -> {selected_candidato}:", df_candidato[['MUNICIPIO_UPPER', 'QT_VOTOS_NOMINAIS', 'Valor pago']].to_dict('records'))
-
     # Unindo os dados políticos com o mapa geográfico do RS
     gdf_plot = gdf.merge(df_candidato, left_on='name_upper', right_on='MUNICIPIO_UPPER', how='left')
 
@@ -120,6 +116,7 @@ def update_map(selected_candidato):
         hover_name='name',
         custom_data=['Valor pago', 'QT_VOTOS_NOMINAIS'], 
         color_continuous_scale="YlOrRd", 
+        range_color=[0, max(1, gdf_plot['Valor pago'].max())],
         title=f"Distribuição de Emendas e Votos: {selected_candidato}"
     )
 
